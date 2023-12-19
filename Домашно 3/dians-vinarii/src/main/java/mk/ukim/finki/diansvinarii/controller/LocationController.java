@@ -1,32 +1,21 @@
 package mk.ukim.finki.diansvinarii.controller;
 
 import ch.qos.logback.core.model.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api")
 public class LocationController {
 
-    @GetMapping("/chooseLocation")
-    public String showChooseLocationForm() {
-        return "chooseLocationForm";
-    }
-
     @PostMapping("/chooseLocation")
-    public String handleChosenLocation(@RequestParam String location, Model model) {
-        // Assuming the user provides a location as a string
-        // You can perform validation and processing here
-        model.addAttribute("chosenLocation", location);
-        return "redirect:/navigate";
-    }
+    public ResponseEntity<String> handleChosenLocation(@RequestBody Map<String, String> requestBody) {
+        String location = requestBody.get("location");
+        // Validate and process the location as needed
 
-    @GetMapping("/navigate")
-    public String navigateToChosenLocation(Model model) {
-        // Access the chosen location from the model or from a service
-        String chosenLocation = (String) model.getAttribute("chosenLocation");
-        model.addAttribute("chosenLocation", chosenLocation);
-        return "navigate";
+        return ResponseEntity.ok("Successfully chosen location: " + location);
     }
 }
