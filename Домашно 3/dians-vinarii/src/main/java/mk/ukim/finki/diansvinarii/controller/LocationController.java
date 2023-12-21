@@ -1,9 +1,6 @@
 package mk.ukim.finki.diansvinarii.controller;
 
-import ch.qos.logback.core.model.Model;
-import com.fasterxml.jackson.annotation.JsonAlias;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -13,13 +10,8 @@ import java.util.Map;
 public class LocationController {
 
     static class LatLng {
-        @JsonAlias({"lat", "latitude"})
         private double lat;
-
-        @JsonAlias({"lng", "longitude"})
         private double lng;
-
-        // getters and setters
 
         public double getLat() {
             return lat;
@@ -38,21 +30,41 @@ public class LocationController {
         }
     }
 
-    @PostMapping("/navigate")
-    public ResponseEntity<String> navigateToChosenLocation(@RequestBody Map<String, LatLng> locationData) {
-        LatLng currentLocation = locationData.get("currentLocation");
-        LatLng desiredLocation = locationData.get("desiredLocation");
+    @PostMapping("/directions")
+    public ResponseEntity<Object> getDirections(@RequestBody Map<String, LatLng> locationData) {
+        LatLng startLocation = locationData.get("startLocation");
+        LatLng endLocation = locationData.get("endLocation");
 
         // Validate and process the locations as needed
-        String response = generateGoogleMapsLink(currentLocation, desiredLocation);
 
-        return ResponseEntity.ok(response);
+        // Calculate directions using a simple algorithm (Haversine formula)
+        double[] coordinates = calculateDirections(startLocation, endLocation);
+
+        return ResponseEntity.ok(coordinates);
     }
 
-    private String generateGoogleMapsLink(LatLng currentLocation, LatLng desiredLocation) {
-        // You can customize this link based on your requirements
-        return "https://www.google.com/maps/dir/?api=1&origin=" +
-                currentLocation.getLat() + "," + currentLocation.getLng() +
-                "&destination=" + desiredLocation.getLat() + "," + desiredLocation.getLng();
+    private double[] calculateDirections(LatLng startLocation, LatLng endLocation) {
+        // Haversine formula for distance calculation
+        double R = 6371.0; // Radius of the Earth in kilometers
+        double lat1 = Math.toRadians(startLocation.getLat());
+        double lon1 = Math.toRadians(startLocation.getLng());
+        double lat2 = Math.toRadians(endLocation.getLat());
+        double lon2 = Math.toRadians(endLocation.getLng());
+
+        double dlat = lat2 - lat1;
+        double dlon = lon2 - lon1;
+
+        double a = Math.sin(dlat / 2) * Math.sin(dlat / 2) +
+                Math.cos(lat1) * Math.cos(lat2) *
+                        Math.sin(dlon / 2) * Math.sin(dlon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        double distance = R * c;
+
+        // For simplicity, return a list of coordinates representing the path
+        // In a real-world scenario, you might want to use a more advanced algorithm
+        // Here, we're returning an array of two coordinates: start and end
+        return new double[]{startLocation.getLat(), startLocation.getLng(), endLocation.getLat(), endLocation.getLng()};
     }
 }

@@ -86,3 +86,48 @@ export default function Map(){
         <LocationMarker/>
         </MapContainer>);
 }
+
+const MapWithDirections = () => {
+    const [startLocation, setStartLocation] = useState([42.139607, 21.7415446]); // Initial start location
+    const [endLocation, setEndLocation] = useState([42.6639, 21.1655]); // Initial end location
+    const [directions, setDirections] = useState(null);
+
+    const handleGetDirections = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/api/directions', {
+                startLocation,
+                endLocation,
+            });
+            setDirections(response.data);
+        } catch (error) {
+            console.error('Error getting directions:', error);
+        }
+    };
+
+    return (
+        <div>
+            <h2>Map with Directions</h2>
+            <button onClick={handleGetDirections}>Get Directions</button>
+            <MapContainer center={startLocation} zoom={13} style={{ height: '400px', width: '100%' }}>
+                <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={startLocation}>
+                    <Popup>Start Location</Popup>
+                </Marker>
+                <Marker position={endLocation}>
+                    <Popup>End Location</Popup>
+                </Marker>
+                {directions && (
+                    <Polyline
+                        pathOptions={{ color: 'blue' }}
+                        positions={directions} // assuming directions is an array of coordinates
+                    />
+                )}
+            </MapContainer>
+        </div>
+    );
+};
+
+export default MapWithDirections;
