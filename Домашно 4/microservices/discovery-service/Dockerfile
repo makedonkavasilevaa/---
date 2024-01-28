@@ -1,12 +1,8 @@
-FROM openjdk:11-jre-slim
-
+FROM openjdk:17-jdk-slim
 WORKDIR /discovery-service
 
-# Copy the JAR file into the container
-COPY target/discovery-service.jar /app/discovery-service.jar
+COPY target/discovery-service-0.0.1-SNAPSHOT.jar /discovery-service
 
-# Expose the port that the Spring Boot application will run on
-EXPOSE 8082
+EXPOSE 8761
 
-# Command to run the Spring Boot application
-CMD ["java", "-jar", "discovery-service.jar"]
+CMD ["java", "-jar", "discovery-service-0.0.1-SNAPSHOT.jar"]

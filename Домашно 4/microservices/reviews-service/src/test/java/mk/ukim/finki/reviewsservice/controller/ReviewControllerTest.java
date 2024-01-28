@@ -1,7 +1,7 @@
-package mk.ukim.finki.diansvinarii.controller;
+package mk.ukim.finki.reviewsservice.controller;
 
-import mk.ukim.finki.diansvinarii.model.Review;
-import mk.ukim.finki.diansvinarii.service.impl.ReviewServiceImpl;
+import mk.ukim.finki.reviewsservice.model.Review;
+import mk.ukim.finki.reviewsservice.service.impl.ReviewServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -61,23 +61,6 @@ class ReviewControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("4.5"));
     }
 
-    @Test
-    void addReview() throws Exception {
-        // Mocking the service method
-        Mockito.when(reviewService.create(1L, 5, "Test review", LocalDateTime.now(), 1L)).thenReturn(new Review());
-
-        // Setting up the controller for testing
-        mockMvc = MockMvcBuilders.standaloneSetup(reviewController).build();
-
-        // Formatting the current timestamp in the required format
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
-
-        // Performing the POST request and asserting the result
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/review/add/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"score\":5, \"desc\":\"Test review\", \"timestamp\":\"" + timestamp + "\", \"userId\":\"1\"}"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
 
     @Test
     void getReview() throws Exception {

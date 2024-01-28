@@ -1,11 +1,11 @@
-package mk.ukim.finki.diansvinarii.controller;
+package mk.ukim.finki.authservice.controller;
 
-import mk.ukim.finki.diansvinarii.dto.JwtAuthenticationDto;
-import mk.ukim.finki.diansvinarii.dto.RefreshTokenRequest;
-import mk.ukim.finki.diansvinarii.dto.SignInRequest;
-import mk.ukim.finki.diansvinarii.dto.SignUpRequest;
-import mk.ukim.finki.diansvinarii.model.User;
-import mk.ukim.finki.diansvinarii.service.AuthenticationService;
+import mk.ukim.finki.authservice.dto.JwtAuthenticationDto;
+import mk.ukim.finki.authservice.dto.RefreshTokenRequest;
+import mk.ukim.finki.authservice.dto.SignInRequest;
+import mk.ukim.finki.authservice.dto.SignUpRequest;
+import mk.ukim.finki.authservice.model.User;
+import mk.ukim.finki.authservice.service.AuthenticationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

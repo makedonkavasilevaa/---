@@ -1,12 +1,6 @@
-FROM openjdk:11-jre-slim
-
+FROM openjdk:17-jdk-slim
 WORKDIR /api-gateway
 
-# Copy the JAR file into the container
-COPY target/api-gateway.jar /app/api-gateway.jar
-
-# Expose the port that the Spring Boot application will run on
-EXPOSE 8082
-
-# Command to run the Spring Boot application
-CMD ["java", "-jar", "api-gateway.jar"]
+COPY target/api-gateway-0.0.1-SNAPSHOT.jar /api-gateway
+EXPOSE 3005
+CMD ["java", "-jar", "api-gateway-0.0.1-SNAPSHOT.jar"]

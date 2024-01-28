@@ -1,40 +1,55 @@
 version: '3'
+
+networks:
+  network1:
+    driver: bridge
+
 services:
-  backend:
-    build:
-      context: ./dians-vinarii
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-
-  frontend:
-    build:
-      context: ./wine-and-dine-front-end
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-
   api-gateway:
-    build:
-      context: ./microservices/api-gateway
-      dockerfile: Dockerfile
-
-  auth-service:
-    build:
-      context: ./microservices/microservice2
-      dockerfile: Dockerfile
+    build: ./microservices/api-gateway
+    ports:
+      - "3005:3005"
+    networks:
+      - network1
+    depends_on:
+      - discovery-service
+      - auth-service
+      - review-service
+      - winery-service
 
   discovery-service:
-    build:
-      context: ./microservices/discovery-service
-      dockerfile: Dockerfile
+    build: ./microservices/discovery-service
+    ports:
+      - "8761:8761"
+    networks:
+      - network1
 
-  reviews-service:
-    build:
-      context: ./microservices/reviews-service
-      dockerfile: Dockerfile
+  auth-service:
+    build: ./microservices/auth-service
+    ports:
+      - "4003:4003"
+    networks:
+      - network1
+
+  review-service:
+    build: ./microservices/reviews-service
+    ports:
+      - "4001:4001"
+    networks:
+      - network1
 
   winery-service:
-    build:
-      context: ./microservices/winery-service
-      dockerfile: Dockerfile
+    build: ./microservices/winery-service
+    ports:
+      - "4002:4002"
+    networks:
+      - network1
+
+  wine-and-dine-front-end:
+    build: ./wine-and-dine-front-end
+    ports:
+      - "3000:3000"
+    networks:
+      - network1
+    depends_on:
+      - api-gateway

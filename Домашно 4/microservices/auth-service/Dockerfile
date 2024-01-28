@@ -1,12 +1,8 @@
-FROM openjdk:11-jre-slim
-
+FROM openjdk:17-jdk-slim
 WORKDIR /auth-service
 
-# Copy the JAR file into the container
-COPY target/auth-service.jar /app/auth-service.jar
+COPY target/auth-service-0.0.1-SNAPSHOT.jar /auth-service
 
-# Expose the port that the Spring Boot application will run on
-EXPOSE 8082
+EXPOSE 4003
 
-# Command to run the Spring Boot application
-CMD ["java", "-jar", "auth-service.jar"]
+CMD ["java", "-jar", "auth-service-0.0.1-SNAPSHOT.jar"]
